@@ -26,6 +26,13 @@ sketched in advance.
 ## Getting started
 
 ```bash
-npm install
-npm test
+pnpm install
+pnpm test
 ```
+
+## Repo layout
+
+A pnpm monorepo. The pure domain lives in `packages/core` and is where the TDD
+happens; it has no knowledge of any delivery framework. A web initializer
+(`apps/web`, a Next.js app) will be added later as a thin delivery layer that
+calls into the core.

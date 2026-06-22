@@ -4,37 +4,28 @@
   "description": "TDD scaffolding generator (bricks -> resolved recipe) with an emergent hexagonal architecture",
   "license": "MIT",
   "author": "remyShift",
-  "type": "commonjs",
-  "main": "build/index.js",
+  "private": true,
+  "packageManager": "pnpm@10.18.2",
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=24"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "test": "vitest",
-    "test:run": "vitest run",
-    "coverage": "vitest run --coverage",
+    "build": "pnpm -r run build",
+    "test": "pnpm -r run test",
+    "test:run": "pnpm -r run test:run",
+    "coverage": "pnpm -r run coverage",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
-  "keywords": [
-    "tdd",
-    "hexagonal",
-    "scaffolding",
-    "typescript"
-  ],
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^26.0.0",
-    "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.7.0",
     "prettier": "^3.8.4",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.0",
-    "vitest": "^4.1.9"
+    "typescript-eslint": "^8.62.0"
   }
 }

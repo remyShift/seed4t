@@ -8,6 +8,13 @@ to drive out with one red test at a time. New behaviors discovered while working
 get added here, not implemented on the spot. The architecture is described where
 it **emerges**, never planned ahead.
 
+**Delivery.** seed4t is consumed through a web initializer (`apps/web`, a Next.js
+app added later) that is a thin shell: it shows the catalog, takes the selection,
+calls the core, and returns the result. No domain logic lives in the web layer.
+
+- **V1** output: a `package.json` text to copy-paste and install.
+- **V2** output: the full hexagonal folder structure of the generated project.
+
 Legend :
 `[ ]` = todo
 `[x]` = done
@@ -53,28 +60,44 @@ integration later._
 
 ---
 
-## Phase 3 — Second port: recipe output
+## Phase 3 — Recipe output (V1: a package.json)
 
-_What emerges: the second edge of the hexagon. The cart is turned into a pure
-`Recipe` value object, then that recipe is emitted through a `RecipeWriter`
-port. Once both ports exist, the hexagon is real: pure domain at the center, one
-input port and one output port, fakes in tests, real adapters at the edge._
+_What emerges: turning a resolved cart into output. For V1 it stays pure: a
+`Recipe` value object, then a serialization to `package.json` text. No file port
+yet — the web layer just returns that string and the user copies it. The real
+output **port** only earns its place in V2 (writing a whole folder tree), so it
+is deliberately deferred._
 
 - [ ] **T10 — Build the recipe.** A resolved cart → a `Recipe` value object (bricks + resolved versions)
-      _(pure transformation, no port yet)_
-- [ ] **T11 — Emit the recipe.** Writing the recipe out
-      _(introduces `interface RecipeWriter { write(recipe): void }`; `InMemoryRecipeWriter` in tests)_
+      _(pure transformation, no port)_
+- [ ] **T11 — Serialize to package.json.** `Recipe` → a `package.json` JSON string
+      _(pure function; the Next.js layer just hands this string back, holding no logic)_
 
 ---
 
-## Phase 4 — Structural refactor (no new behavior)
+## Phase 4 — Internal structure of core (no new behavior)
 
-_Only now, with two concrete ports, does the hexagonal layout earn its place.
-This is a move-the-files refactor under green tests, not a new spec._
+_The monorepo already enforces the outer boundary: `packages/core` cannot import
+the Next.js app, the dependency points inward by construction. This phase is
+about the **inside** of core — splitting it once a port (`VersionResolver`) and a
+clear use case exist. A move-the-files refactor under green tests, not a spec._
 
-- [ ] Split into `domain/` (pure), `ports/` (interfaces), `adapters/` (npm, fs, in-memory), `app/` (use case), `index.ts` (composition root)
-- [ ] Enforce the dependency rule: `domain` never imports `adapters`/`fs`/`http`
+- [ ] Split `packages/core/src` into `domain/` (pure), `ports/` (interfaces), `adapters/` (npm registry, in-memory fakes), `app/` (use case wiring resolve → recipe)
+- [ ] Enforce the inner rule: `domain` never imports an adapter or `node:*`
       _(guard it at build time with dependency-cruiser so the debt can't creep back)_
+
+---
+
+## Phase 5 — V2: scaffold a full project (the real output port)
+
+_What emerges: when the output stops being one file and becomes a whole folder
+tree (the generated project's own hexagonal structure), a genuine output **port**
+finally earns its place. The domain describes the files to emit; adapters decide
+where they land._
+
+- [ ] **T12 — Describe the project tree.** `Recipe` → a pure in-memory representation of files + folders
+- [ ] **T13 — Emit the tree.** introduce `interface ProjectWriter { write(tree): void }`
+      _(fakes in tests; real adapters later: a zip to download, or write-to-disk)_
 
 ---
 
