@@ -1,29 +1,29 @@
 # seed4t
 
-Générateur de scaffolding TypeScript construit en TDD. L'architecture hexagonale
-émerge au fil des tests (ports/adapters introduits seulement quand un test force
-le domaine à sortir), elle n'est pas dessinée à l'avance.
+TypeScript scaffolding generator built with TDD. The hexagonal architecture
+emerges through the tests (ports/adapters are introduced only when a test forces
+the domain to reach outward), it is not designed up front.
 
 ## Stack
 
 - TypeScript (strict)
-- Vitest (tests, globals activés)
-- ESLint + Prettier (qualité, Prettier gère le formatage, ESLint le reste)
+- Vitest (tests, globals enabled)
+- ESLint + Prettier (quality; Prettier handles formatting, ESLint the rest)
 
 ## Scripts
 
-- `npm test` : vitest en watch
-- `npm run test:run` : une passe (utilisé en CI)
-- `npm run coverage` : couverture (v8)
-- `npm run lint` / `npm run lint:fix` : ESLint
-- `npm run format` / `npm run format:check` : Prettier
-- `npm run build` : compilation TS via `tsconfig.build.json` (exclut les tests)
+- `npm test`: vitest in watch mode
+- `npm run test:run`: single pass (used in CI)
+- `npm run coverage`: coverage (v8)
+- `npm run lint` / `npm run lint:fix`: ESLint
+- `npm run format` / `npm run format:check`: Prettier
+- `npm run build`: TS compilation via `tsconfig.build.json` (excludes tests)
 
 ## Node
 
-Node 20.19.5, déclaré dans `.nvmrc` et `.tool-versions` (mise / nvm).
+Node 20.19.5, declared in `.nvmrc` and `.tool-versions` (mise / nvm).
 
-## Démarrage
+## Getting started
 
 ```bash
 npm install
