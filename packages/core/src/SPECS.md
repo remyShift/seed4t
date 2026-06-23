@@ -3,14 +3,9 @@
 > From a selection of bricks (a library + a version), produce a resolved recipe:
 > the full dependency set, transitive dependencies included, deduplicated.
 
-This is a **living test list**, not a frozen design doc. Each item is a behavior
-to drive out with one red test at a time. New behaviors discovered while working
-get added here, not implemented on the spot. The architecture is described where
-it **emerges**, never planned ahead.
+This is a **living test list**, not a frozen design doc. Each item is a behavior to drive out with one red test at a time. New behaviors discovered while working get added here, not implemented on the spot. The architecture is described where it **emerges**, never planned ahead.
 
-**Delivery.** seed4t is consumed through a web initializer (`apps/web`, a Next.js
-app added later) that is a thin shell: it shows the catalog, takes the selection,
-calls the core, and returns the result. No domain logic lives in the web layer.
+**Delivery.** seed4t is consumed through a web initializer (`apps/web`, a Next.js app added later) that is a thin shell: it shows the catalog, takes the selection, calls the core, and returns the result. No domain logic lives in the web layer.
 
 - **V1** output: a `package.json` text to copy-paste and install.
 - **V2** output: the full hexagonal folder structure of the generated project.
@@ -25,11 +20,8 @@ step surfaces.
 
 ## Phase 1 — Pure domain: a correct dependency graph
 
-_What emerges: the model moves from a single `dependant` to a real resolved,
-deduplicated, acyclic graph. A dedicated resolution concept (a
-`DependencyResolver` or a resolve method) appears out of the refactor. Still
-100% in memory — no ports, no fakes. A pure domain that needs nothing external
-is the proof it's healthy._
+_What emerges: the model moves from a single `dependant` to a real resolved, deduplicated, acyclic graph. A dedicated resolution concept (a
+`DependencyResolver` or a resolve method) appears out of the refactor. Still 100% in memory — no ports, no fakes. A pure domain that needs nothing external is the proof it's healthy._
 
 - [ ] **T1 — Catalog dedup.** Adding the same brick twice to the catalog keeps one
 - [ ] **T2 — Cart dedup.** `cart.add("a"); cart.add("a")` yields `[a]`

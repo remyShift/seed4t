@@ -24,15 +24,18 @@ export class CatalogBuilder {
   private readonly bricks: CatalogBrick[] = [];
 
   add(brickToAdd: TBrick): this {
-    if (this.bricks.some((b) => b.brick.name === brickToAdd.name)) {
-      return this;
-    }
     this.bricks.push(new CatalogBrick(brickToAdd, null));
+
     return this;
   }
 
-  build(): CatalogBrick[] {
-    return this.bricks;
+  build(): Catalog {
+    const dedupBricks = this.bricks.filter(
+      (b, index) =>
+        this.bricks.findIndex((b2) => b2.brick.name === b.brick.name) === index,
+    );
+
+    return new Catalog(dedupBricks);
   }
 
   addBrickWithDependencies(brickToAdd: TBrick, dependant: TBrick): this {
@@ -41,13 +44,25 @@ export class CatalogBuilder {
   }
 }
 
+export class Catalog {
+  constructor(private readonly entries: CatalogBrick[]) {}
+
+  get bricks(): TBrick[] {
+    return this.entries.map((e) => e.brick);
+  }
+
+  find(name: string): CatalogBrick | undefined {
+    return this.entries.find((e) => e.brick.name === name);
+  }
+}
+
 export class Cart {
   bricks: TBrick[] = [];
 
-  constructor(private readonly catalog: CatalogBrick[] = []) {}
+  constructor(private readonly catalog: Catalog) {}
 
   add(brickName: string) {
-    const brickCatalog = this.catalog.find((b) => b.brick.name === brickName);
+    const brickCatalog = this.catalog.find(brickName);
 
     if (!brickCatalog) {
       return;
