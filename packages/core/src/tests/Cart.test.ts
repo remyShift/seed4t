@@ -1,6 +1,6 @@
-import { createBrick } from "./Brick";
-import { CatalogBuilder } from "./Catalog";
-import { Cart } from "./Cart";
+import { createBrick } from "./utilTest";
+import { CatalogBuilder } from "../Catalog";
+import { Cart } from "../Cart";
 
 describe("Cart", () => {
   it("should allow user to add brick", () => {

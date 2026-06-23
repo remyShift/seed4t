@@ -1,5 +1,5 @@
-import { createBrick } from "./Brick";
-import { CatalogBuilder } from "./Catalog";
+import { createBrick } from "./utilTest";
+import { CatalogBuilder } from "../Catalog";
 
 describe("Catalog", () => {
   it("should not have a Catalog with duplicates bricks", () => {
