@@ -3,20 +3,8 @@ import type { TBrick } from "./Brick";
 export class CatalogBrick {
   constructor(
     public brick: TBrick,
-    public dependant: TBrick | null,
+    public dependants: TBrick[] | null,
   ) {}
-}
-
-export class Catalog {
-  constructor(private readonly entries: CatalogBrick[]) {}
-
-  get bricks(): TBrick[] {
-    return this.entries.map((e) => e.brick);
-  }
-
-  find(name: string): CatalogBrick | undefined {
-    return this.entries.find((e) => e.brick.name === name);
-  }
 }
 
 export class CatalogBuilder {
@@ -28,8 +16,8 @@ export class CatalogBuilder {
     return this;
   }
 
-  addBrickWithDependencies(brickToAdd: TBrick, dependant: TBrick): this {
-    this.bricks.push(new CatalogBrick(brickToAdd, dependant));
+  addBrickWithDependencies(brickToAdd: TBrick, dependants: TBrick[]): this {
+    this.bricks.push(new CatalogBrick(brickToAdd, dependants));
 
     return this;
   }
@@ -41,5 +29,17 @@ export class CatalogBuilder {
     );
 
     return new Catalog(dedupBricks);
+  }
+}
+
+export class Catalog {
+  constructor(private readonly entries: CatalogBrick[]) {}
+
+  get bricks(): TBrick[] {
+    return this.entries.map((e) => e.brick);
+  }
+
+  find(name: string): CatalogBrick | undefined {
+    return this.entries.find((e) => e.brick.name === name);
   }
 }

@@ -19,8 +19,10 @@ export class Cart {
 
     this.bricks.push(brickCatalog.brick);
 
-    if (brickCatalog.dependant) {
-      this.bricks.push(brickCatalog.dependant);
+    if (brickCatalog.dependants) {
+      for (const dependant of brickCatalog.dependants) {
+        this.bricks.push(dependant);
+      }
     }
   }
 

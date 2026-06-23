@@ -24,7 +24,7 @@ _What emerges: the model moves from a single `dependant` to a real resolved, ded
 `DependencyResolver` or a resolve method) appears out of the refactor. Still 100% in memory — no ports, no fakes. A pure domain that needs nothing external is the proof it's healthy._
 
 - [x] **T1 — Catalog dedup.** Adding the same brick twice to the catalog keeps one
-- [ ] **T2 — Cart dedup.** `cart.add("a"); cart.add("a")` yields `[a]`
+- [x] **T2 — Cart dedup.** `cart.add("a"); cart.add("a")` yields `[a]`
 - [ ] **T3 — Multiple dependencies.** A depends on B **and** C → adding A yields `[A, B, C]`
       _(forces the model from `dependant: Brick | null` to a real dependency list)_
 - [ ] **T4 — Transitive dependencies.** A→B→C → adding A yields `[A, B, C]`
