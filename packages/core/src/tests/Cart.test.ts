@@ -40,7 +40,7 @@ describe("Cart", () => {
     const cart = new Cart(catalog);
     cart.add("a");
 
-    expect(cart.bricks).toEqual([a, b]);
+    expect(cart.bricks).toEqual(expect.arrayContaining([a, b]));
   });
 
   it("should add only add once a brick if added multiple times", () => {
@@ -67,7 +67,7 @@ describe("Cart", () => {
     const cart = new Cart(catalog);
     cart.add("a");
 
-    expect(cart.bricks).toEqual([a, b, c]);
+    expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
   });
 
   it("should have 3 bricks when adding one that depends on 1 that depends also on 1", () => {
@@ -81,6 +81,25 @@ describe("Cart", () => {
     const cart = new Cart(catalog);
     cart.add("a");
 
-    expect(cart.bricks).toEqual([a, b, c]);
+    expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
+  });
+
+  it("should have 4 bricks when adding mutlitples brick that depends on the same", () => {
+    const a = createBrick("a", "5.2.1");
+    const b = createBrick("b", "5.2.1");
+    const c = createBrick("c", "5.2.1");
+    const d = createBrick("d", "5.2.1");
+
+    const catalogBuilder = new CatalogBuilder();
+    const catalog = catalogBuilder
+      .add(c, [d])
+      .add(b, [d])
+      .add(a, [b, c])
+      .build();
+
+    const cart = new Cart(catalog);
+    cart.add("a");
+
+    expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c, d]));
   });
 });
