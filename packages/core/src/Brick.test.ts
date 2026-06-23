@@ -1,4 +1,5 @@
-import { Brick, createBrick, CatalogBuilder, Cart } from "./Brick";
+import type { Brick } from "./Brick";
+import { createBrick, CatalogBuilder, Cart } from "./Brick";
 
 describe("Brick", () => {
   it("Should create a Brick", () => {
@@ -16,6 +17,7 @@ describe("Brick", () => {
   // and when creating a brick without precising the version,
   // it should default to "latest" // highest version
 
+  /* eslint-disable vitest/no-commented-out-tests */
   // it("should not have a Catalog with duplicates bricks", () => {
   //   const a = createBrick("a", "5.2.1");
   //   const b = createBrick("b", "5.2.1");
@@ -27,6 +29,7 @@ describe("Brick", () => {
 
   //   expect(catalogBuilder.build()).toEqual([a, b]);
   // });
+  /* eslint-enable vitest/no-commented-out-tests */
 
   it("should allow user to add brick", () => {
     const a = createBrick("a", "5.2.1");

@@ -23,7 +23,7 @@ export class CatalogBrick {
 export class CatalogBuilder {
   private bricks: CatalogBrick[] = [];
 
-  add(brickToAdd: Brick): CatalogBuilder {
+  add(brickToAdd: Brick): this {
     if (this.bricks.some((b) => b.brick.name === brickToAdd.name)) {
       return this;
     }
@@ -35,10 +35,7 @@ export class CatalogBuilder {
     return this.bricks;
   }
 
-  addBrickWithDependencies(
-    brickToAdd: Brick,
-    dependant: Brick,
-  ): CatalogBuilder {
+  addBrickWithDependencies(brickToAdd: Brick, dependant: Brick): this {
     this.bricks.push(new CatalogBrick(brickToAdd, dependant));
     return this;
   }

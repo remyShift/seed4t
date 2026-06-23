@@ -2,14 +2,24 @@
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "build", "coverage"],
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2023",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "rootDir": "./src",
     "outDir": "./build",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "isolatedModules": true,
     "skipLibCheck": true,
     "types": ["vitest/globals", "node"]
   }

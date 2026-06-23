@@ -8,7 +8,7 @@
   "type": "commonjs",
   "main": "build/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "test": "vitest",
     "test:run": "vitest run",
     "coverage": "vitest run --coverage"
@@ -22,6 +22,7 @@
   "devDependencies": {
     "@types/node": "^26.0.0",
     "@vitest/coverage-v8": "^4.1.9",
+    "tsc-alias": "^1.8.17",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
   }

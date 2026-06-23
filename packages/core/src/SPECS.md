@@ -84,7 +84,9 @@ clear use case exist. A move-the-files refactor under green tests, not a spec._
 
 - [ ] Split `packages/core/src` into `domain/` (pure), `ports/` (interfaces), `adapters/` (npm registry, in-memory fakes), `app/` (use case wiring resolve → recipe)
 - [ ] Enforce the inner rule: `domain` never imports an adapter or `node:*`
-      _(guard it at build time with dependency-cruiser so the debt can't creep back)_
+      _(graph-level guard at build time with dependency-cruiser; optionally an
+      in-editor guard with eslint-plugin-boundaries or import/no-restricted-paths.
+      Wire these only once the layers physically exist, not before.)_
 
 ---
 
