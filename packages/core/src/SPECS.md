@@ -27,7 +27,7 @@ _What emerges: the model moves from a single `dependant` to a real resolved, ded
 - [x] **T2 — Cart dedup.** `cart.add("a"); cart.add("a")` yields `[a]`
 - [x] **T3 — Multiple dependencies.** A depends on B **and** C → adding A yields `[A, B, C]`
       _(forces the model from `dependant: Brick | null` to a real dependency list)_
-- [ ] **T4 — Transitive dependencies.** A→B→C → adding A yields `[A, B, C]`
+- [x] **T4 — Transitive dependencies.** A→B→C → adding A yields `[A, B, C]`
       _(the cart can no longer read direct deps; it must walk the graph via the catalog)_
 - [ ] **T5 — Diamond dedup.** A→B, A→C, B→D, C→D → adding A yields `[A, B, C, D]` (D once)
       _(forces a visited-set during the traversal)_
