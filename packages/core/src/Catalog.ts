@@ -10,14 +10,12 @@ export class CatalogBrick {
 export class CatalogBuilder {
   private readonly bricks: CatalogBrick[] = [];
 
-  add(brickToAdd: TBrick): this {
-    this.bricks.push(new CatalogBrick(brickToAdd, null));
-
-    return this;
-  }
-
-  addBrickWithDependencies(brickToAdd: TBrick, dependants: TBrick[]): this {
-    this.bricks.push(new CatalogBrick(brickToAdd, dependants));
+  add(brickToAdd: TBrick, dependants?: TBrick[]): this {
+    if (dependants) {
+      this.bricks.push(new CatalogBrick(brickToAdd, dependants));
+    } else {
+      this.bricks.push(new CatalogBrick(brickToAdd, null));
+    }
 
     return this;
   }

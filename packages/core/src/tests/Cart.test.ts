@@ -35,7 +35,7 @@ describe("Cart", () => {
     const a = createBrick("a", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.addBrickWithDependencies(a, [b]).build();
+    const catalog = catalogBuilder.add(a, [b]).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
@@ -62,7 +62,7 @@ describe("Cart", () => {
     const c = createBrick("c", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.addBrickWithDependencies(a, [b, c]).build();
+    const catalog = catalogBuilder.add(a, [b, c]).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
