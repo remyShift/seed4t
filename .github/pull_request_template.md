@@ -1,18 +1,18 @@
 ## 🧠 tl;dr (too long; didn’t review)
 
 <!-- Summarize this PR in 1–3 sentences.
-What’s changing, and why does it matter for the shop or the user? -->
+What’s changing, and why? -->
 
-## 📸 Visuals
+## 📸 Visuals (optional)
 
-<!-- Add any helpful visuals: screenshots, GIFs, or short screen recordings.
-Narrated recordings are encouraged for UX or flow changes. -->
+<!-- Anything that helps a reviewer: terminal output, a screenshot, a short recording.
+Skip for pure logic or refactor changes. -->
 
 ## 🧪 How to Test
 
-<!-- Describe how to confirm this works.
-A brief recording can also help demonstrate your implementation in action. -->
+<!-- How to confirm this works: commands to run and expected output.
+New or updated tests count too. -->
 
 ## ⚠️ Notes / Gotchas (optional)
 
-<!-- Mention anything reviewers should keep in mind — known issues, edge cases, or tradeoffs. -->
+<!-- Anything reviewers should keep in mind — edge cases, tradeoffs, follow-ups. -->
