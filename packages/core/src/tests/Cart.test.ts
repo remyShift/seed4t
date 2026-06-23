@@ -1,4 +1,4 @@
-import { createBrick } from "./utilTest";
+import { createBrick } from "./utils";
 import { CatalogBuilder } from "../Catalog";
 import { Cart } from "../Cart";
 
@@ -41,5 +41,18 @@ describe("Cart", () => {
     cart.add("a");
 
     expect(cart.bricks).toEqual([a, b]);
+  });
+
+  it("should add only add once a brick if added multiple times", () => {
+    const a = createBrick("a", "5.2.1");
+
+    const catalogBuilder = new CatalogBuilder();
+    const catalog = catalogBuilder.add(a).build();
+
+    const cart = new Cart(catalog);
+    cart.add("a");
+    cart.add("a");
+
+    expect(cart.bricks).toEqual([a]);
   });
 });

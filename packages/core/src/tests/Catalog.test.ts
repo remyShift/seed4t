@@ -1,4 +1,4 @@
-import { createBrick } from "./utilTest";
+import { createBrick } from "./utils";
 import { CatalogBuilder } from "../Catalog";
 
 describe("Catalog", () => {

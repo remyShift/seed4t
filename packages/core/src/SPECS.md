@@ -23,7 +23,7 @@ step surfaces.
 _What emerges: the model moves from a single `dependant` to a real resolved, deduplicated, acyclic graph. A dedicated resolution concept (a
 `DependencyResolver` or a resolve method) appears out of the refactor. Still 100% in memory — no ports, no fakes. A pure domain that needs nothing external is the proof it's healthy._
 
-- [ ] **T1 — Catalog dedup.** Adding the same brick twice to the catalog keeps one
+- [x] **T1 — Catalog dedup.** Adding the same brick twice to the catalog keeps one
 - [ ] **T2 — Cart dedup.** `cart.add("a"); cart.add("a")` yields `[a]`
 - [ ] **T3 — Multiple dependencies.** A depends on B **and** C → adding A yields `[A, B, C]`
       _(forces the model from `dependant: Brick | null` to a real dependency list)_

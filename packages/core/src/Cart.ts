@@ -13,6 +13,10 @@ export class Cart {
       return;
     }
 
+    if (this.bricks.includes(brickCatalog.brick)) {
+      return;
+    }
+
     this.bricks.push(brickCatalog.brick);
 
     if (brickCatalog.dependant) {
