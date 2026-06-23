@@ -39,6 +39,25 @@ export default tseslint.config(
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
+      // Convention B: data shapes are `type` (TBrick), contracts are `interface`
+      // (IPort). So do NOT force object shapes to interface.
+      "@typescript-eslint/consistent-type-definitions": "off",
+      "@typescript-eslint/prefer-readonly": "error",
+      "@typescript-eslint/naming-convention": [
+        "error",
+        {
+          selector: "interface",
+          format: ["PascalCase"],
+          prefix: ["I"],
+          filter: { regex: "^I[a-z]", match: false },
+        },
+        { selector: "typeAlias", format: ["PascalCase"], prefix: ["T"] },
+        {
+          selector: "typeParameter",
+          format: ["PascalCase"],
+          filter: { regex: "^[A-Z]([A-Z0-9]+|[a-z0-9]*)$", match: true },
+        },
+      ],
     },
   },
 

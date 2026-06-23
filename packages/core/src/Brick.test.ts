@@ -1,11 +1,11 @@
-import type { Brick } from "./Brick";
+import type { TBrick } from "./Brick";
 import { createBrick, CatalogBuilder, Cart } from "./Brick";
 
 describe("Brick", () => {
   it("Should create a Brick", () => {
     const created = createBrick("Express", "5.2.1");
 
-    const express: Brick = {
+    const express: TBrick = {
       name: "Express",
       version: "5.2.1",
     };

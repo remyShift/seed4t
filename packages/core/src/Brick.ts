@@ -1,12 +1,12 @@
-type Version = `${string}.${string}` | `${string}.${string}.${string}`;
+type TVersion = `${string}.${string}` | `${string}.${string}.${string}`;
 
-export interface Brick {
+export type TBrick = {
   name: string;
-  version: Version;
+  version: TVersion;
   // url: string;
-}
+};
 
-export function createBrick(name: string, version: Version): Brick {
+export function createBrick(name: string, version: TVersion): TBrick {
   return {
     name,
     version,
@@ -15,15 +15,15 @@ export function createBrick(name: string, version: Version): Brick {
 
 export class CatalogBrick {
   constructor(
-    public brick: Brick,
-    public dependant: Brick | null,
+    public brick: TBrick,
+    public dependant: TBrick | null,
   ) {}
 }
 
 export class CatalogBuilder {
-  private bricks: CatalogBrick[] = [];
+  private readonly bricks: CatalogBrick[] = [];
 
-  add(brickToAdd: Brick): this {
+  add(brickToAdd: TBrick): this {
     if (this.bricks.some((b) => b.brick.name === brickToAdd.name)) {
       return this;
     }
@@ -35,16 +35,16 @@ export class CatalogBuilder {
     return this.bricks;
   }
 
-  addBrickWithDependencies(brickToAdd: Brick, dependant: Brick): this {
+  addBrickWithDependencies(brickToAdd: TBrick, dependant: TBrick): this {
     this.bricks.push(new CatalogBrick(brickToAdd, dependant));
     return this;
   }
 }
 
 export class Cart {
-  bricks: Brick[] = [];
+  bricks: TBrick[] = [];
 
-  constructor(private catalog: CatalogBrick[] = []) {}
+  constructor(private readonly catalog: CatalogBrick[] = []) {}
 
   add(brickName: string) {
     const brickCatalog = this.catalog.find((b) => b.brick.name === brickName);
