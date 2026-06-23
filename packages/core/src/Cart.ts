@@ -7,21 +7,11 @@ export class Cart {
   constructor(private readonly catalog: Catalog) {}
 
   add(brickName: string) {
-    const brickCatalog = this.catalog.find(brickName);
+    const resolved = this.catalog.resolve(brickName);
 
-    if (!brickCatalog) {
-      return;
-    }
-
-    if (this.bricks.includes(brickCatalog.brick)) {
-      return;
-    }
-
-    this.bricks.push(brickCatalog.brick);
-
-    if (brickCatalog.dependants) {
-      for (const dependant of brickCatalog.dependants) {
-        this.bricks.push(dependant);
+    for (const brick of resolved) {
+      if (!this.bricks.some((b) => b.name === brick.name)) {
+        this.bricks.push(brick);
       }
     }
   }

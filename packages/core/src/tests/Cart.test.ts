@@ -69,4 +69,18 @@ describe("Cart", () => {
 
     expect(cart.bricks).toEqual([a, b, c]);
   });
+
+  it("should have 3 bricks when adding one that depends on 1 that depends also on 1", () => {
+    const a = createBrick("a", "5.2.1");
+    const b = createBrick("b", "5.2.1");
+    const c = createBrick("c", "5.2.1");
+
+    const catalogBuilder = new CatalogBuilder();
+    const catalog = catalogBuilder.add(b, [c]).add(a, [b]).build();
+
+    const cart = new Cart(catalog);
+    cart.add("a");
+
+    expect(cart.bricks).toEqual([a, b, c]);
+  });
 });

@@ -40,4 +40,29 @@ export class Catalog {
   find(name: string): CatalogBrick | undefined {
     return this.entries.find((e) => e.brick.name === name);
   }
+
+  resolve(name: string): TBrick[] {
+    const visited = new Set<string>();
+    const result: TBrick[] = [];
+
+    const visit = (brick: TBrick) => {
+      if (visited.has(brick.name)) return;
+      visited.add(brick.name);
+
+      result.push(brick);
+
+      const entry = this.find(brick.name);
+
+      for (const dependant of entry?.dependants ?? []) {
+        visit(dependant);
+      }
+    };
+
+    const start = this.find(name);
+    if (start) {
+      visit(start.brick);
+    }
+
+    return result;
+  }
 }
