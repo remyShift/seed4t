@@ -23,6 +23,13 @@ export class Cart {
   }
 
   get bricks(): TBrick[] {
-    return this.roots.flatMap((r) => this.catalog.resolve(r));
+    const all = this.roots.flatMap((r) => this.catalog.resolve(r));
+
+    const seen = new Set<string>();
+    return all.filter((brick) => {
+      if (seen.has(brick.name)) return false;
+      seen.add(brick.name);
+      return true;
+    });
   }
 }

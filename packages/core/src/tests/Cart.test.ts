@@ -40,6 +40,7 @@ describe("Cart", () => {
     const cart = new Cart(catalog);
     cart.add("a");
 
+    expect(cart.bricks).toHaveLength(2);
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b]));
   });
 
@@ -67,6 +68,7 @@ describe("Cart", () => {
     const cart = new Cart(catalog);
     cart.add("a");
 
+    expect(cart.bricks).toHaveLength(3);
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
   });
 
@@ -81,6 +83,7 @@ describe("Cart", () => {
     const cart = new Cart(catalog);
     cart.add("a");
 
+    expect(cart.bricks).toHaveLength(3);
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
   });
 
@@ -100,6 +103,7 @@ describe("Cart", () => {
     const cart = new Cart(catalog);
     cart.add("a");
 
+    expect(cart.bricks).toHaveLength(4);
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c, d]));
   });
 
@@ -113,6 +117,7 @@ describe("Cart", () => {
     const cart = new Cart(catalog);
     cart.add("a");
 
+    expect(cart.bricks).toHaveLength(2);
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b]));
   });
 
@@ -128,6 +133,7 @@ describe("Cart", () => {
     cart.add("a");
     cart.add("c");
 
+    expect(cart.bricks).toHaveLength(3);
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
 
     cart.remove("a");
@@ -138,19 +144,22 @@ describe("Cart", () => {
   it("should remove a brick and not its dependencies if shared with an other brick", () => {
     const a = createBrick("a", "5.2.1");
     const b = createBrick("b", "5.2.1");
+    const bDup = createBrick("b", "5.2.1");
     const c = createBrick("c", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.add(a, [b]).add(c, [b]).build();
+    const catalog = catalogBuilder.add(a, [b]).add(c, [bDup]).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
     cart.add("c");
 
+    expect(cart.bricks).toHaveLength(3);
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
 
     cart.remove("a");
 
+    expect(cart.bricks).toHaveLength(2);
     expect(cart.bricks).toEqual(expect.arrayContaining([b, c]));
   });
 });
