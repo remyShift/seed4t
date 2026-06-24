@@ -18,26 +18,10 @@ step surfaces.
 
 ---
 
-## Phase 1 — Pure domain: a correct dependency graph
-
-_What emerges: the model moves from a single `dependant` to a real resolved, deduplicated, acyclic graph. A dedicated resolution concept (a
-`DependencyResolver` or a resolve method) appears out of the refactor. Still 100% in memory — no ports, no fakes. A pure domain that needs nothing external is the proof it's healthy._
-
-- [x] **T1 — Catalog dedup.** Adding the same brick twice to the catalog keeps one
-- [x] **T2 — Cart dedup.** `cart.add("a"); cart.add("a")` yields `[a]`
-- [x] **T3 — Multiple dependencies.** A depends on B **and** C → adding A yields `[A, B, C]`
-      _(forces the model from `dependant: Brick | null` to a real dependency list)_
-- [x] **T4 — Transitive dependencies.** A→B→C → adding A yields `[A, B, C]`
-      _(the cart can no longer read direct deps; it must walk the graph via the catalog)_
-- [X] **T5 — Diamond dedup.** A→B, A→C, B→D, C→D → adding A yields `[A, B, C, D]` (D once)
-      _(forces a visited-set during the traversal)_
-- [X] **T6 — Cycle.** A→B→A → no infinite loop (explicit error or stop, to be decided)
-- [ ] **T7 — Dependency-aware remove.** Removing a brick respects what still depends on it
-      _(product rule to decide: GC orphans, or refuse the removal)_
+- [ ] Packages should be ordered, by dependency order ==> dependency order matters for install order
+e.g A depends on B, so B must be installed before A.
 
 ---
-
-## Phase 2 — First port: version resolution
 
 _What emerges: the first boundary of the hexagon. A default version ("latest")
 lives outside the domain (the npm registry), so the domain cannot compute it. It
@@ -52,8 +36,6 @@ integration later._
 
 ---
 
-## Phase 3 — Recipe output (V1: a package.json)
-
 _What emerges: turning a resolved cart into output. For V1 it stays pure: a
 `Recipe` value object, then a serialization to `package.json` text. No file port
 yet — the web layer just returns that string and the user copies it. The real
@@ -64,40 +46,3 @@ is deliberately deferred._
       _(pure transformation, no port)_
 - [ ] **T11 — Serialize to package.json.** `Recipe` → a `package.json` JSON string
       _(pure function; the Next.js layer just hands this string back, holding no logic)_
-
----
-
-## Phase 4 — Internal structure of core (no new behavior)
-
-_The monorepo already enforces the outer boundary: `packages/core` cannot import
-the Next.js app, the dependency points inward by construction. This phase is
-about the **inside** of core — splitting it once a port (`VersionResolver`) and a
-clear use case exist. A move-the-files refactor under green tests, not a spec._
-
-- [ ] Split `packages/core/src` into `domain/` (pure), `ports/` (interfaces), `adapters/` (npm registry, in-memory fakes), `app/` (use case wiring resolve → recipe)
-- [ ] Enforce the inner rule: `domain` never imports an adapter or `node:*`
-      _(graph-level guard at build time with dependency-cruiser; optionally an
-      in-editor guard with eslint-plugin-boundaries or import/no-restricted-paths.
-      Wire these only once the layers physically exist, not before.)_
-
----
-
-## Phase 5 — V2: scaffold a full project (the real output port)
-
-_What emerges: when the output stops being one file and becomes a whole folder
-tree (the generated project's own hexagonal structure), a genuine output **port**
-finally earns its place. The domain describes the files to emit; adapters decide
-where they land._
-
-- [ ] **T12 — Describe the project tree.** `Recipe` → a pure in-memory representation of files + folders
-- [ ] **T13 — Emit the tree.** introduce `interface ProjectWriter { write(tree): void }`
-      _(fakes in tests; real adapters later: a zip to download, or write-to-disk)_
-
----
-
-## Open decisions (settle when the test arrives, never before)
-
-- **Dependency storage** — by name (`string[]`) rather than by `Brick` reference; the catalog is the source of truth (recommended)
-- **`remove` rule** — GC orphans vs. refuse when something still depends on it (T7)
-- **Cycle behavior** — explicit error vs. stop silently (T6)
-- **"latest"** — real npm registry vs. a fixed table for the kata; the fake suffices for a long time
