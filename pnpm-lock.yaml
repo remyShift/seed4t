@@ -45,7 +45,7 @@ importers:
         specifier: ^8.62.0
         version: 8.62.0(eslint@10.5.0(jiti@2.6.1))(typescript@6.0.3)
 
-  packages/core:
+  packages/domain:
     devDependencies:
       '@types/node':
         specifier: ^26.0.0
