@@ -3,16 +3,16 @@ import type { TBrick } from "./Brick";
 export class CatalogBrick {
   constructor(
     public brick: TBrick,
-    public dependants: TBrick[] | null,
+    public dependencies: TBrick[] | null,
   ) {}
 }
 
 export class CatalogBuilder {
   private readonly bricks: CatalogBrick[] = [];
 
-  add(brickToAdd: TBrick, dependants?: TBrick[]): this {
-    if (dependants) {
-      this.bricks.push(new CatalogBrick(brickToAdd, dependants));
+  add(brickToAdd: TBrick, dependencies?: TBrick[]): this {
+    if (dependencies) {
+      this.bricks.push(new CatalogBrick(brickToAdd, dependencies));
     } else {
       this.bricks.push(new CatalogBrick(brickToAdd, null));
     }
@@ -53,8 +53,8 @@ export class Catalog {
 
       const entry = this.find(brick.name);
 
-      for (const dependant of entry?.dependants ?? []) {
-        visit(dependant);
+      for (const dependencie of entry?.dependencies ?? []) {
+        visit(dependencie);
       }
     };
 
