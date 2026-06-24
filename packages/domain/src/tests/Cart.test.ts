@@ -35,7 +35,7 @@ describe("Cart", () => {
     const a = createBrick("a", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.add(a, [b]).build();
+    const catalog = catalogBuilder.add(b).add(a, ["b"]).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
@@ -63,7 +63,7 @@ describe("Cart", () => {
     const c = createBrick("c", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.add(a, [b, c]).build();
+    const catalog = catalogBuilder.add(b).add(c).add(a, ["b", "c"]).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
@@ -72,13 +72,13 @@ describe("Cart", () => {
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
   });
 
-  it("should have 3 bricks when adding one that depends on 1 that depends also on 1", () => {
+  it("should have 3 bricks when adding one that depends on another that itself depends on a third", () => {
     const a = createBrick("a", "5.2.1");
     const b = createBrick("b", "5.2.1");
     const c = createBrick("c", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.add(b, [c]).add(a, [b]).build();
+    const catalog = catalogBuilder.add(c).add(b, ["c"]).add(a, ["b"]).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
@@ -95,9 +95,10 @@ describe("Cart", () => {
 
     const catalogBuilder = new CatalogBuilder();
     const catalog = catalogBuilder
-      .add(c, [d])
-      .add(b, [d])
-      .add(a, [b, c])
+      .add(d)
+      .add(c, ["d"])
+      .add(b, ["d"])
+      .add(a, ["b", "c"])
       .build();
 
     const cart = new Cart(catalog);
@@ -112,7 +113,7 @@ describe("Cart", () => {
     const b = createBrick("b", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.add(b, [a]).add(a, [b]).build();
+    const catalog = catalogBuilder.add(b, ["a"]).add(a, ["b"]).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
@@ -127,7 +128,7 @@ describe("Cart", () => {
     const c = createBrick("c", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.add(a, [b]).add(c).build();
+    const catalog = catalogBuilder.add(b).add(a, ["b"]).add(c).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
@@ -144,11 +145,10 @@ describe("Cart", () => {
   it("should remove a brick but keep its dependencies that are shared with another brick", () => {
     const a = createBrick("a", "5.2.1");
     const b = createBrick("b", "5.2.1");
-    const bDup = createBrick("b", "5.2.1");
     const c = createBrick("c", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
-    const catalog = catalogBuilder.add(a, [b]).add(c, [bDup]).build();
+    const catalog = catalogBuilder.add(b).add(a, ["b"]).add(c, ["b"]).build();
 
     const cart = new Cart(catalog);
     cart.add("a");
@@ -161,5 +161,20 @@ describe("Cart", () => {
 
     expect(cart.bricks).toHaveLength(2);
     expect(cart.bricks).toEqual(expect.arrayContaining([b, c]));
+  });
+
+  it("should ignore remove for a brick that is only a transitive dependency", () => {
+    const a = createBrick("a", "5.2.1");
+    const b = createBrick("b", "5.2.1");
+
+    const catalogBuilder = new CatalogBuilder();
+    const catalog = catalogBuilder.add(b).add(a, ["b"]).build();
+
+    const cart = new Cart(catalog);
+    cart.add("a");
+    cart.remove("b");
+
+    expect(cart.bricks).toHaveLength(2);
+    expect(cart.bricks).toEqual(expect.arrayContaining([a, b]));
   });
 });

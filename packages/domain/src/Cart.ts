@@ -1,5 +1,6 @@
 import type { TBrick } from "./Brick";
 import type { Catalog } from "./Catalog";
+import { uniqueBy } from "./uniqueBy";
 
 export class Cart {
   private roots: string[] = [];
@@ -22,12 +23,6 @@ export class Cart {
 
   get bricks(): TBrick[] {
     const all = this.roots.flatMap((r) => this.catalog.resolve(r));
-
-    const seen = new Set<string>();
-    return all.filter((brick) => {
-      if (seen.has(brick.name)) return false;
-      seen.add(brick.name);
-      return true;
-    });
+    return uniqueBy(all, (brick) => brick.name);
   }
 }
