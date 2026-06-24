@@ -107,7 +107,7 @@ describe("Cart", () => {
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c, d]));
   });
 
-  it("should handle circular dependencies", () => {
+  it("should not loop forever on a cycle", () => {
     const a = createBrick("a", "5.2.1");
     const b = createBrick("b", "5.2.1");
 
