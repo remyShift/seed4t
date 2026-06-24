@@ -7,16 +7,14 @@ export class Cart {
   constructor(private readonly catalog: Catalog) {}
 
   add(brickName: string) {
-    const resolved = this.catalog.resolve(brickName);
-    if (resolved.length === 0) return;
+    if (!this.catalog.find(brickName)) return;
     if (this.roots.includes(brickName)) return;
 
     this.roots.push(brickName);
   }
 
   remove(brickName: string) {
-    const resolved = this.catalog.resolve(brickName);
-    if (resolved.length === 0) return;
+    if (!this.catalog.find(brickName)) return;
     if (!this.roots.includes(brickName)) return;
 
     this.roots = this.roots.filter((r) => r !== brickName);
