@@ -29,9 +29,9 @@ _What emerges: the model moves from a single `dependant` to a real resolved, ded
       _(forces the model from `dependant: Brick | null` to a real dependency list)_
 - [x] **T4 — Transitive dependencies.** A→B→C → adding A yields `[A, B, C]`
       _(the cart can no longer read direct deps; it must walk the graph via the catalog)_
-- [ ] **T5 — Diamond dedup.** A→B, A→C, B→D, C→D → adding A yields `[A, B, C, D]` (D once)
+- [X] **T5 — Diamond dedup.** A→B, A→C, B→D, C→D → adding A yields `[A, B, C, D]` (D once)
       _(forces a visited-set during the traversal)_
-- [ ] **T6 — Cycle.** A→B→A → no infinite loop (explicit error or stop, to be decided)
+- [X] **T6 — Cycle.** A→B→A → no infinite loop (explicit error or stop, to be decided)
 - [ ] **T7 — Dependency-aware remove.** Removing a brick respects what still depends on it
       _(product rule to decide: GC orphans, or refuse the removal)_
 

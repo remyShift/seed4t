@@ -102,4 +102,55 @@ describe("Cart", () => {
 
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c, d]));
   });
+
+  it("should handle circular dependencies", () => {
+    const a = createBrick("a", "5.2.1");
+    const b = createBrick("b", "5.2.1");
+
+    const catalogBuilder = new CatalogBuilder();
+    const catalog = catalogBuilder.add(b, [a]).add(a, [b]).build();
+
+    const cart = new Cart(catalog);
+    cart.add("a");
+
+    expect(cart.bricks).toEqual(expect.arrayContaining([a, b]));
+  });
+
+  it("should remove a brick and its dependencies", () => {
+    const a = createBrick("a", "5.2.1");
+    const b = createBrick("b", "5.2.1");
+    const c = createBrick("c", "5.2.1");
+
+    const catalogBuilder = new CatalogBuilder();
+    const catalog = catalogBuilder.add(a, [b]).add(c).build();
+
+    const cart = new Cart(catalog);
+    cart.add("a");
+    cart.add("c");
+
+    expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
+
+    cart.remove("a");
+
+    expect(cart.bricks).toEqual([c]);
+  });
+
+  it("should remove a brick and not its dependencies if shared with an other brick", () => {
+    const a = createBrick("a", "5.2.1");
+    const b = createBrick("b", "5.2.1");
+    const c = createBrick("c", "5.2.1");
+
+    const catalogBuilder = new CatalogBuilder();
+    const catalog = catalogBuilder.add(a, [b]).add(c, [b]).build();
+
+    const cart = new Cart(catalog);
+    cart.add("a");
+    cart.add("c");
+
+    expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
+
+    cart.remove("a");
+
+    expect(cart.bricks).toEqual(expect.arrayContaining([b, c]));
+  });
 });
