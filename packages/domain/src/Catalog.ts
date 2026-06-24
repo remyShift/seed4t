@@ -3,7 +3,7 @@ import type { TBrick } from "./Brick";
 export class CatalogBrick {
   constructor(
     public brick: TBrick,
-    public dependencies: TBrick[] | null,
+    public dependencies: TBrick[],
   ) {}
 }
 
@@ -14,7 +14,7 @@ export class CatalogBuilder {
     if (dependencies) {
       this.bricks.push(new CatalogBrick(brickToAdd, dependencies));
     } else {
-      this.bricks.push(new CatalogBrick(brickToAdd, null));
+      this.bricks.push(new CatalogBrick(brickToAdd, []));
     }
 
     return this;
