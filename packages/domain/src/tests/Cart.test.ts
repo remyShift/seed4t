@@ -44,7 +44,7 @@ describe("Cart", () => {
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b]));
   });
 
-  it("should add only add once a brick if added multiple times", () => {
+  it("should add a brick only once even if added multiple times", () => {
     const a = createBrick("a", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder();
@@ -87,7 +87,7 @@ describe("Cart", () => {
     expect(cart.bricks).toEqual(expect.arrayContaining([a, b, c]));
   });
 
-  it("should have 4 bricks when adding mutlitples brick that depends on the same", () => {
+  it("should have 4 bricks when adding multiple bricks that depend on the same one", () => {
     const a = createBrick("a", "5.2.1");
     const b = createBrick("b", "5.2.1");
     const c = createBrick("c", "5.2.1");
@@ -141,7 +141,7 @@ describe("Cart", () => {
     expect(cart.bricks).toEqual([c]);
   });
 
-  it("should remove a brick and not its dependencies if shared with an other brick", () => {
+  it("should remove a brick but keep its dependencies that are shared with another brick", () => {
     const a = createBrick("a", "5.2.1");
     const b = createBrick("b", "5.2.1");
     const bDup = createBrick("b", "5.2.1");

@@ -53,8 +53,8 @@ export class Catalog {
 
       const entry = this.find(brick.name);
 
-      for (const dependencie of entry?.dependencies ?? []) {
-        visit(dependencie);
+      for (const dependency of entry?.dependencies ?? []) {
+        visit(dependency);
       }
     };
 
