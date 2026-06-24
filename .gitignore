@@ -3,3 +3,6 @@ build
 coverage
 *.log
 .DS_Store
+
+
+SPECS.md
