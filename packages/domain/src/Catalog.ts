@@ -28,14 +28,13 @@ export class CatalogBuilder {
     const entries = uniqueBy(this.bricks, (b) => b.brick.name);
     const names = new Set(entries.map((e) => e.brick.name));
 
-    for (const entry of entries) {
-      for (const dependency of entry.dependencies) {
-        if (!names.has(dependency)) {
-          throw new Error(
-            `Unknown dependency "${dependency}" required by "${entry.brick.name}"`,
-          );
-        }
-      }
+    const allDeps = entries.flatMap((e) =>
+      e.dependencies.map((dep) => ({ dep, owner: e.brick.name })),
+    );
+
+    for (const { dep, owner } of allDeps) {
+      if (!names.has(dep))
+        throw new Error(`Unknown dependency "${dep}" required by "${owner}"`);
     }
 
     return new Catalog(entries);
