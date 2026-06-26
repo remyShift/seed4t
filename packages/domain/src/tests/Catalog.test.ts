@@ -36,10 +36,14 @@ describe("Catalog", () => {
   });
 
   describe("resolve version", () => {
-    it('should resolve a brick added without a version defaults to "latest"', () => {
-      const catalog = new CatalogBuilder().add({ name: "react" }).build();
+    it("should resolve to a concrete version by the resolver", () => {
+      const resolver = { latest: (_name: string) => "19.0.0" };
+      const catalog = new CatalogBuilder(resolver)
+        .add({ name: "react" })
+        .build();
+
       expect(catalog.resolve("react")).toEqual([
-        { name: "react", version: "latest" },
+        { name: "react", version: "19.0.0" },
       ]);
     });
   });

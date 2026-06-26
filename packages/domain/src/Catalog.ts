@@ -1,6 +1,10 @@
 import type { TInputBrick, TResolvedBrick } from "./Brick";
 import { uniqueBy } from "./uniqueBy";
 
+export interface IResolver {
+  latest: (brickName: string) => string;
+}
+
 export class CatalogBrick {
   constructor(
     public brick: TResolvedBrick,
@@ -11,8 +15,22 @@ export class CatalogBrick {
 export class CatalogBuilder {
   private readonly bricks: CatalogBrick[] = [];
 
+  constructor(private readonly resolver?: IResolver) {}
+
   add(brickToAdd: TInputBrick, dependencies: string[] = []): this {
-    const resolvedVersion = brickToAdd.version ?? "latest";
+    let resolvedVersion: string;
+
+    if (!brickToAdd.version) {
+      if (!this.resolver)
+        throw new Error(
+          `No version specified for brick "${brickToAdd.name}" and no resolver available`,
+        );
+
+      resolvedVersion = this.resolver.latest(brickToAdd.name);
+    } else {
+      resolvedVersion = brickToAdd.version;
+    }
+
     const resolvedBrick: TResolvedBrick = {
       ...brickToAdd,
       version: resolvedVersion,
