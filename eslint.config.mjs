@@ -39,7 +39,7 @@ export default tseslint.config(
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
-      // Convention B: data shapes are `type` (TBrick), contracts are `interface`
+      // Convention B: data shapes are `type` (TInputBrick), contracts are `interface`
       // (IPort). So do NOT force object shapes to interface.
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/prefer-readonly": "error",

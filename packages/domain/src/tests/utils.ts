@@ -1,6 +1,9 @@
-import type { TBrick, TVersion } from "../Brick";
+import type { TInputBrick } from "../Brick";
 
-export function createBrick(name: string, version: TVersion): TBrick {
+export function createBrick(
+  name: string,
+  version: string | undefined,
+): TInputBrick {
   return {
     name,
     version,

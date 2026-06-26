@@ -1,7 +1,10 @@
-export type TVersion = `${string}.${string}` | `${string}.${string}.${string}`;
+// export type TVersion = `${string}.${string}` | `${string}.${string}.${string}`;
 
-export type TBrick = {
+export type TInputBrick = {
   name: string;
-  version: TVersion;
-  // url: string;
+  version?: string;
+};
+
+export type TResolvedBrick = Omit<TInputBrick, "version"> & {
+  version: string;
 };

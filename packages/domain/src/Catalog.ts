@@ -1,9 +1,9 @@
-import type { TBrick } from "./Brick";
+import type { TInputBrick, TResolvedBrick } from "./Brick";
 import { uniqueBy } from "./uniqueBy";
 
 export class CatalogBrick {
   constructor(
-    public brick: TBrick,
+    public brick: TResolvedBrick,
     public dependencies: string[],
   ) {}
 }
@@ -11,8 +11,14 @@ export class CatalogBrick {
 export class CatalogBuilder {
   private readonly bricks: CatalogBrick[] = [];
 
-  add(brickToAdd: TBrick, dependencies: string[] = []): this {
-    this.bricks.push(new CatalogBrick(brickToAdd, dependencies));
+  add(brickToAdd: TInputBrick, dependencies: string[] = []): this {
+    const resolvedVersion = brickToAdd.version ?? "latest";
+    const resolvedBrick: TResolvedBrick = {
+      ...brickToAdd,
+      version: resolvedVersion,
+    };
+
+    this.bricks.push(new CatalogBrick(resolvedBrick, dependencies));
     return this;
   }
 
@@ -37,7 +43,7 @@ export class CatalogBuilder {
 export class Catalog {
   constructor(private readonly entries: CatalogBrick[]) {}
 
-  get bricks(): TBrick[] {
+  get bricks(): TResolvedBrick[] {
     return this.entries.map((e) => e.brick);
   }
 
@@ -45,9 +51,9 @@ export class Catalog {
     return this.entries.find((e) => e.brick.name === name);
   }
 
-  resolve(name: string): TBrick[] {
+  resolve(name: string): TResolvedBrick[] {
     const visited = new Set<string>();
-    const result: TBrick[] = [];
+    const result: TResolvedBrick[] = [];
 
     const visit = (entry: CatalogBrick) => {
       if (visited.has(entry.brick.name)) return;

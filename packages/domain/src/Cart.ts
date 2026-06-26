@@ -1,4 +1,4 @@
-import type { TBrick } from "./Brick";
+import type { TResolvedBrick } from "./Brick";
 import type { Catalog } from "./Catalog";
 import { uniqueBy } from "./uniqueBy";
 
@@ -21,7 +21,7 @@ export class Cart {
     this.roots = this.roots.filter((r) => r !== brickName);
   }
 
-  get bricks(): TBrick[] {
+  get bricks(): TResolvedBrick[] {
     const all = this.roots.flatMap((r) => this.catalog.resolve(r));
     return uniqueBy(all, (brick) => brick.name);
   }
