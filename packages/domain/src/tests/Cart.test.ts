@@ -1,14 +1,10 @@
 import { createInputBrick } from "./utils";
 import { CatalogBuilder } from "../Catalog";
 import { Cart } from "../Cart";
-import type { TVersion } from "@/Brick";
+import { mockResolver } from "./utils";
 
 describe("Cart", () => {
   it("should allow user to add brick", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder(mockResolver);
@@ -21,11 +17,6 @@ describe("Cart", () => {
   });
 
   it("should allow user to add and remove brick", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
-
     const a = createInputBrick("a", "5.2.1");
     const b = createInputBrick("b", "5.2.1");
 
@@ -41,10 +32,6 @@ describe("Cart", () => {
   });
 
   it("should have 2 bricks when adding one that depends on another", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const b = createInputBrick("b", "5.2.1");
     const a = createInputBrick("a", "5.2.1");
 
@@ -59,10 +46,6 @@ describe("Cart", () => {
   });
 
   it("should add a brick only once even if added multiple times", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
 
     const catalogBuilder = new CatalogBuilder(mockResolver);
@@ -76,10 +59,6 @@ describe("Cart", () => {
   });
 
   it("should have 3 bricks when adding one that depends on 2 others", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
     const b = createInputBrick("b", "5.2.1");
     const c = createInputBrick("c", "5.2.1");
@@ -95,10 +74,6 @@ describe("Cart", () => {
   });
 
   it("should have 3 bricks when adding one that depends on another that itself depends on a third", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
     const b = createInputBrick("b", "5.2.1");
     const c = createInputBrick("c", "5.2.1");
@@ -114,10 +89,6 @@ describe("Cart", () => {
   });
 
   it("should have 4 bricks when adding multiple bricks that depend on the same one", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
     const b = createInputBrick("b", "5.2.1");
     const c = createInputBrick("c", "5.2.1");
@@ -139,10 +110,6 @@ describe("Cart", () => {
   });
 
   it("should not loop forever on a cycle", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
     const b = createInputBrick("b", "5.2.1");
 
@@ -157,10 +124,6 @@ describe("Cart", () => {
   });
 
   it("should remove a brick and its dependencies", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
     const b = createInputBrick("b", "5.2.1");
     const c = createInputBrick("c", "5.2.1");
@@ -181,10 +144,6 @@ describe("Cart", () => {
   });
 
   it("should remove a brick but keep its dependencies that are shared with another brick", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
     const b = createInputBrick("b", "5.2.1");
     const c = createInputBrick("c", "5.2.1");
@@ -206,10 +165,6 @@ describe("Cart", () => {
   });
 
   it("should ignore remove for a brick that is only a transitive dependency", () => {
-    const resolvedVersion: TVersion = "5.2.1";
-    const mockResolver = {
-      resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-    };
     const a = createInputBrick("a", "5.2.1");
     const b = createInputBrick("b", "5.2.1");
 

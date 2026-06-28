@@ -9,3 +9,8 @@ export function createInputBrick(
     version,
   };
 }
+
+const mockResolvedVersion: TVersion = "5.2.1";
+export const mockResolver = {
+  resolve: (_name: string, _version?: TVersion) => mockResolvedVersion,
+};

@@ -1,15 +1,11 @@
 import { createInputBrick } from "./utils";
 import { CatalogBuilder } from "../Catalog";
 import type { TVersion } from "../Brick";
+import { mockResolver } from "./utils";
 
 describe("Catalog", () => {
   describe("add", () => {
     it("should not have a Catalog with duplicates bricks", () => {
-      const resolvedVersion: TVersion = "5.2.1";
-      const mockResolver = {
-        resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-      };
-
       const a = createInputBrick("a", "5.2.1");
       const b = createInputBrick("b", "5.2.1");
       const aDup = createInputBrick("a", "5.2.1");
@@ -22,10 +18,6 @@ describe("Catalog", () => {
     });
 
     it("should throw when a dependency is not in the catalog", () => {
-      const resolvedVersion: TVersion = "5.2.1";
-      const mockResolver = {
-        resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-      };
       const a = createInputBrick("a", "5.2.1");
 
       const catalogBuilder = new CatalogBuilder(mockResolver).add(a, ["b"]);
@@ -38,10 +30,6 @@ describe("Catalog", () => {
 
   describe("resolve version", () => {
     it("should resolve a dependency to its catalog version if it exist", () => {
-      const resolvedVersion: TVersion = "5.2.1";
-      const mockResolver = {
-        resolve: (_name: string, _version?: TVersion) => resolvedVersion,
-      };
       const a = createInputBrick("a", "5.2.1");
 
       const catalog = new CatalogBuilder(mockResolver).add(a).build();
