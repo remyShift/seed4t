@@ -41,16 +41,10 @@ export class CatalogBuilder {
   }
 
   private resolveBrick(brickToAdd: TInputBrick): TResolvedBrick {
-    let resolvedVersion: TVersion;
-
-    if (!brickToAdd.version) {
-      resolvedVersion = this.resolver.resolve(brickToAdd.name);
-    } else {
-      resolvedVersion = this.resolver.resolve(
-        brickToAdd.name,
-        brickToAdd.version,
-      );
-    }
+    const resolvedVersion = this.resolver.resolve(
+      brickToAdd.name,
+      brickToAdd.version,
+    );
 
     const resolvedBrick: TResolvedBrick = {
       ...brickToAdd,
