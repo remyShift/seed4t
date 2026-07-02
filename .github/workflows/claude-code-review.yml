@@ -36,11 +36,63 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          plugin_marketplaces: "https://github.com/anthropics/claude-code.git"
-          plugins: "code-review@claude-code-plugins"
           # Persistent summary comment so there is always visible output,
           # even when the review has no inline comments to post.
           use_sticky_comment: true
-          prompt: "/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+          prompt: |
+            Review PR ${{ github.repository }}/pull/${{ github.event.pull_request.number }}.
+
+            ## Context
+            seed4t is a learning project built with strict TDD and DDD. The code is writes
+            all by human, no AI assisting: the goal of the review is growth, not fixing
+            things for writers. The pure domain lives in packages/domain and must depend
+            on NOTHING external, that is the proof the domain is healthy.
+
+            ## Review axes, in priority order
+
+            1. Domain purity: no external dependency in packages/domain,
+               no infrastructure leak. A port (interface) only appears when
+               a test supplies a value the domain cannot fabricate on its own.
+               Business logic never depends on infra, always the other way around.
+
+            2. TDD discipline: one test = one behavior, one failing test forces ONE
+               design decision. Tests verify behavior, never implementation
+               (no mocks.called, no over-mocking). Watch for test false friends:
+               arrayContaining only proves presence, never absence or uniqueness -
+               flag it when it matters.
+
+            3. Simplicity (Four Rules of Simple Design): pass the tests, reveal
+               intention, eliminate duplication of business knowledge, stay small.
+               Any code beyond current need is a YAGNI to name explicitly.
+               "Working code is a low bar": functional is the minimum, not the goal.
+
+            4. Ubiquitous Language & naming: domain vocabulary (Brick,
+               Grappe, Catalog, Cart, Recipe) must be everywhere in the code. Hunt
+               empty names (data, item, process, handle) and linguistic
+               antipatterns (a name that signals something other than what the code does).
+
+            5. Modularity & coupling: one reason to change per class (SRP),
+               strong internal cohesion, low external coupling. Flag message
+               chains (Law of Demeter), primitive obsession (a primitive where a
+               Value Object would carry validation and intent), the anemic model
+               (data bag object, business logic elsewhere).
+
+            6. Immutability: Value Objects are immutable by nature. const only
+               protects against reassignment, not mutation - flag shared mutations.
+
+            7. Technical debt: any debt introduced must be named in the PR.
+               "We'll add tests later" is a red flag every time.
+
+            ## Posture
+
+            - For each finding: name the design pressure and ask the unblocking question,
+              rather than pasting corrected code. A signature or a name is enough
+              to illustrate, never a full implementation.
+            - Be direct and factual, no flattery. Rank findings by
+              severity (blocker / important / minor). Do not nitpick: a finding
+              must be worth the cost of reading it.
+            - End with a clear verdict: mergeable as-is, or not, and why.
+            - Post findings as inline comments on the relevant lines, and
+              the verdict in the summary comment.
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
