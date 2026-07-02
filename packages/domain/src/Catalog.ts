@@ -1,9 +1,13 @@
-import type { TBrick } from "./Brick";
+import type { TInputBrick, TResolvedBrick, TVersion } from "./Brick";
 import { uniqueBy } from "./uniqueBy";
+
+export interface IVersionResolver {
+  resolve: (brickName: string, version?: TVersion) => TVersion;
+}
 
 export class CatalogBrick {
   constructor(
-    public brick: TBrick,
+    public brick: TResolvedBrick,
     public dependencies: string[],
   ) {}
 }
@@ -11,8 +15,12 @@ export class CatalogBrick {
 export class CatalogBuilder {
   private readonly bricks: CatalogBrick[] = [];
 
-  add(brickToAdd: TBrick, dependencies: string[] = []): this {
-    this.bricks.push(new CatalogBrick(brickToAdd, dependencies));
+  constructor(private readonly resolver: IVersionResolver) {}
+
+  add(brickToAdd: TInputBrick, dependencies: string[] = []): this {
+    const resolvedBrick = this.resolveBrick(brickToAdd);
+
+    this.bricks.push(new CatalogBrick(resolvedBrick, dependencies));
     return this;
   }
 
@@ -20,24 +28,36 @@ export class CatalogBuilder {
     const entries = uniqueBy(this.bricks, (b) => b.brick.name);
     const names = new Set(entries.map((e) => e.brick.name));
 
-    for (const entry of entries) {
-      for (const dependency of entry.dependencies) {
-        if (!names.has(dependency)) {
-          throw new Error(
-            `Unknown dependency "${dependency}" required by "${entry.brick.name}"`,
-          );
-        }
-      }
+    const allDeps = entries.flatMap((e) =>
+      e.dependencies.map((dep) => ({ dep, owner: e.brick.name })),
+    );
+
+    for (const { dep, owner } of allDeps) {
+      if (!names.has(dep))
+        throw new Error(`Unknown dependency "${dep}" required by "${owner}"`);
     }
 
     return new Catalog(entries);
+  }
+
+  private resolveBrick(brickToAdd: TInputBrick): TResolvedBrick {
+    const resolvedVersion = this.resolver.resolve(
+      brickToAdd.name,
+      brickToAdd.version,
+    );
+
+    const resolvedBrick: TResolvedBrick = {
+      ...brickToAdd,
+      version: resolvedVersion,
+    };
+    return resolvedBrick;
   }
 }
 
 export class Catalog {
   constructor(private readonly entries: CatalogBrick[]) {}
 
-  get bricks(): TBrick[] {
+  get bricks(): TResolvedBrick[] {
     return this.entries.map((e) => e.brick);
   }
 
@@ -45,9 +65,9 @@ export class Catalog {
     return this.entries.find((e) => e.brick.name === name);
   }
 
-  resolve(name: string): TBrick[] {
+  resolve(name: string): TResolvedBrick[] {
     const visited = new Set<string>();
-    const result: TBrick[] = [];
+    const result: TResolvedBrick[] = [];
 
     const visit = (entry: CatalogBrick) => {
       if (visited.has(entry.brick.name)) return;
